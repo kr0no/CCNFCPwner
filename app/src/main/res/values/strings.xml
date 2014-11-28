@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">CC NFC Pwner</string>
+    <string name="card_number">Card number:</string>
+    <string name="expiration_date">Expiration date:</string>
+    <string name="holder_name">Holder name:</string>
+    <string name="card_aid">Card Aid:</string>
+    <string name="application_label">Application:</string>
+    <string name="pin_try">Pin trys left:</string>
+    <string name="card_type">Card type:</string>
+    <string name="aid">AID:</string>
+    <string name="info">Put your Credit Card in the back of the phone</string>
+</resources>
