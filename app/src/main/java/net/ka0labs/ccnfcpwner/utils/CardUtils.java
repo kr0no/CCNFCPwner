@@ -5,17 +5,6 @@ import com.github.devnied.emvnfccard.enums.EmvCardScheme;
 import org.apache.commons.lang3.StringUtils;
 
 public class CardUtils {
-
-    /**
-     * Method used to format card number
-     *
-     * @param pCardNumber
-     *            card number to display
-     * @param pType
-     *            card type
-     *
-     * @return the card number formated
-     */
     public static String formatCardNumber(final String pCardNumber, final EmvCardScheme pType) {
         String ret = StringUtils.EMPTY;
         if (StringUtils.isNotBlank(pCardNumber)) {
@@ -32,13 +21,6 @@ public class CardUtils {
         return ret;
     }
 
-    /**
-     * Method used to format AID
-     *
-     * @param pAid
-     *            card aid
-     * @return formated AID
-     */
     public static String formatAid(final String pAid) {
         String ret = StringUtils.EMPTY;
         if (StringUtils.isNotBlank(pAid)) {
@@ -47,9 +29,6 @@ public class CardUtils {
         return ret;
     }
 
-    /**
-     * Private constructor
-     */
     private CardUtils() { }
 
 }

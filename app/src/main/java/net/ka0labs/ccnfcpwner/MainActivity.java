@@ -1,16 +1,23 @@
 package net.ka0labs.ccnfcpwner;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.nfc.NfcAdapter;
+import android.nfc.NfcManager;
 import android.nfc.Tag;
 import android.nfc.tech.IsoDep;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.devnied.emvnfccard.model.EmvCard;
 import com.github.devnied.emvnfccard.parser.EmvParser;
@@ -21,11 +28,17 @@ import net.ka0labs.ccnfcpwner.utils.SimpleAsyncTask;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 public class MainActivity extends ActionBarActivity {
+    private TableLayout layoutData;
+    private TextView tvInfo;
+
     private TextView tvCardNumber;
     private TextView tvHolderName;
     private TextView tvExpiration;
@@ -33,8 +46,7 @@ public class MainActivity extends ActionBarActivity {
     private TextView tvApplication;
     private TextView tvTryPin;
     private TextView tvAid;
-    private TableLayout layoutData;
-    private TextView tvInfo;
+    private Button btnSaveToFile;
 
     // Initiate nfc provider
     private final NFCProvider provider = new NFCProvider();
@@ -42,6 +54,11 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Check if NFC is enabled
+        if(!CheckNFC()) {
+            NFCDialog();
+        }
 
         // Read card if system receives an NFC tag
         if (getIntent().getAction().equals(NfcAdapter.ACTION_TECH_DISCOVERED)) {
@@ -59,7 +76,14 @@ public class MainActivity extends ActionBarActivity {
         tvApplication = (TextView)findViewById(R.id.tvApplication);
         tvTryPin = (TextView)findViewById(R.id.tvTryPin);
         tvAid = (TextView)findViewById(R.id.tvAid);
-
+        //Save button
+        btnSaveToFile = (Button)findViewById(R.id.btnSaveToFile);
+        btnSaveToFile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SaveToFile();
+            }
+        });
     }
 
     //When we receive a tag
@@ -88,6 +112,7 @@ public class MainActivity extends ActionBarActivity {
                         EmvParser parser = new EmvParser(provider, true);
                         mCard = parser.readEmvCard();
                     } catch (IOException e) {
+                        e.printStackTrace();
                     } finally {
                         IOUtils.closeQuietly(mTagComm);
                     }
@@ -137,7 +162,7 @@ public class MainActivity extends ActionBarActivity {
 
                         //AID
                         if (StringUtils.isNotEmpty(mCard.getAid())) {
-                            tvAid.setText(mCard.getAid());
+                            tvAid.setText(CardUtils.formatAid(mCard.getAid()));
                         } else {
                             tvAid.setText("Error");
                         }
@@ -150,6 +175,60 @@ public class MainActivity extends ActionBarActivity {
                 }
             }.execute();
         }
+    }
+
+    void SaveToFile() {
+        if(Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+            //Save data to file sdcard/CCNFCPwner/Cards.txt
+            try {
+                String data = "Card number: " + tvCardNumber.getText().toString() + "\n" +
+                        "Holder name: " + tvHolderName.getText().toString() + "\n" +
+                        "Expiration date: " + tvExpiration.getText().toString() + "\n" +
+                        "Card type: " + tvType.getText().toString() + "\n" +
+                        "Application: " + tvApplication.getText().toString() + "\n" +
+                        "Card AID: " + tvAid.getText().toString() + "\n" +
+                        "Pin trys: " + tvTryPin.getText().toString() + "\n\n" +
+                        "------------------------------------------\n\n";
+                File appFolder = new File(Environment.getExternalStorageDirectory()+"/CCNFCPwner");
+                if(!appFolder.exists()) {
+                    appFolder.mkdir();
+                }
+                File file = new File(appFolder, "Cards.txt");
+                OutputStreamWriter outputStreamWriter = new OutputStreamWriter(new FileOutputStream(file, true));
+                outputStreamWriter.append(data);
+                outputStreamWriter.close();
+                Toast.makeText(this, getString(R.string.toast_saved), Toast.LENGTH_SHORT).show();
+
+                //Disable save button to prevent duplicates
+                btnSaveToFile.setEnabled(false);
+                btnSaveToFile.setText(getString(R.string.saved));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    boolean CheckNFC() {
+        NfcManager manager = (NfcManager)getSystemService(Context.NFC_SERVICE);
+        NfcAdapter adapter = manager.getDefaultAdapter();
+        return adapter != null && adapter.isEnabled();
+    }
+
+    void NFCDialog() {
+        new AlertDialog.Builder(this)
+            .setTitle(getString(R.string.nfcdialog_title))
+            .setMessage(getString(R.string.nfcdialog_message))
+            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    startActivity(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS));
+                }
+            })
+            .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            })
+            .show();
     }
 
     @Override
