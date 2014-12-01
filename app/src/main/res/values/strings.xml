@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="app_name">CC NFC Pwner</string>
     <string name="card_number">Card number:</string>
     <string name="expiration_date">Expiration date:</string>
@@ -10,4 +11,7 @@
     <string name="card_type">Card type:</string>
     <string name="aid">AID:</string>
     <string name="info">Put your Credit Card in the back of the phone</string>
+    <string name="title_activity_info">About</string>
+    <string name="about">CC NFC Pwner was made to read public data on contactless credit cards compliants with EMV norm, using the library EMV NFC Paycard Enrollment.\n\nSource code of this app is available on Github: <a href="https://github.com/kr0no/CCNFCPwner/">https://github.com/kr0no/CCNFCPwner/</a>\n\nFor any questions or suggestions, you can find me at:\nkr0no@ka0labs.net</string>
+    <string name="action_about">About</string>
 </resources>
