@@ -138,6 +138,8 @@ public class MainActivity extends ActionBarActivity {
                         //AID
                         if (StringUtils.isNotEmpty(mCard.getAid())) {
                             tvAid.setText(mCard.getAid());
+                        } else {
+                            tvAid.setText("Error");
                         }
 
                     } else {
