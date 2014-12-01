@@ -25,11 +25,17 @@ android {
     packagingOptions{
         exclude 'META-INF/NOTICE.txt'
         exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/NOTICE'
     }
 }
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.github.devnied.emvnfccard:library:2.1.0'
     compile 'com.android.support:appcompat-v7:21.0.2'
+    compile 'com.github.devnied:bit-lib4j:1.4.10'
+    compile 'org.apache.commons:commons-lang3:3.3.2'
+    compile 'org.apache.directory.studio:org.apache.commons.io:2.4'
+    compile 'org.apache.commons:commons-collections4:4.0'
+    compile 'org.apache.commons:commons-lang3:3.3.2'
 }
