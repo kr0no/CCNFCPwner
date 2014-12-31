@@ -3,7 +3,6 @@ package net.ka0labs.ccnfcpwner;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
-import android.view.MenuItem;
 
 
 public class AboutActivity extends ActionBarActivity {
@@ -21,8 +20,4 @@ public class AboutActivity extends ActionBarActivity {
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
-    }
 }

@@ -190,10 +190,8 @@ public class MainActivity extends ActionBarActivity {
                         "Pin trys: " + tvTryPin.getText().toString() + "\n\n" +
                         "------------------------------------------\n\n";
                 File appFolder = new File(Environment.getExternalStorageDirectory()+"/CCNFCPwner");
-                if(!appFolder.exists()) {
-                    appFolder.mkdir();
-                }
-                File file = new File(appFolder, "Cards.txt");
+                if(!appFolder.exists()) appFolder.mkdir();
+                File file = new File(appFolder, "cards.txt");
                 OutputStreamWriter outputStreamWriter = new OutputStreamWriter(new FileOutputStream(file, true));
                 outputStreamWriter.append(data);
                 outputStreamWriter.close();
