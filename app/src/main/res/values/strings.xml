@@ -20,5 +20,5 @@
     <string name="nfcdialog_title">Enable NFC</string>
     <string name="nfcdialog_message">For retrieve data from the credit card you must have enabled NFC. Open settings to enable it?</string>
 
-    <string name="toast_saved">Saved to sdcard/CCNFCPwner/Cards.txt</string>
+    <string name="toast_saved">Saved to sdcard/CCNFCPwner/cards.txt</string>
 </resources>
